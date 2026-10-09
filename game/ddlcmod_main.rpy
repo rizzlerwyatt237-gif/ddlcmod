@@ -5,11 +5,8 @@
 # IMPORTANT: do not use the global name `theme` in init Python.
 # Ren'Py 6.99 uses `theme` for its Theme object.
 
-# Use a unique entry label so this file does not collide with DDLC's built-in `start` label.
-
 init python:
     import random
-    config.start = "dlcm_start"
 
     # 10 x 10 x 10 = 1000 original, runtime-generated literary fragments.
     dlcm_themes = [
@@ -51,6 +48,7 @@ default dlcm_seen = 0
 default dlcm_fragments = []
 default dlcm_route = "club"
 
+# This is intentionally not named `start`, so it does not replace DDLC's own start label.
 label dlcm_start:
     scene black
     with fade
