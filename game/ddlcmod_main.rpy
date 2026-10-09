@@ -3,21 +3,15 @@
 # No DDLC assets are redistributed by this file.
 # Compatible target: Ren'Py 6.99.x / DDLC 1.1.1.
 
-# Start the mod before DDLC's normal start label, while preserving the
-# original game if the player later returns to it.
 init python:
     config.label_overrides["start"] = "dlcm_start"
 
-# Mod characters use the same presentation style as DDLC, but are separate
-# Character objects so this file does not depend on the original script's
-# variable definitions.
 define dlcm_mc = Character("MC", color="#a0a0a0")
 define dlcm_s = Character("Sayori", color="#ffaaaa")
 define dlcm_n = Character("Natsuki", color="#ff7db8")
 define dlcm_y = Character("Yuri", color="#c8a2ff")
 define dlcm_m = Character("Monika", color="#6fc7a8")
 
-# Persistent progress makes the mod feel like a real replayable route.
 default dlcm_day = 1
 default dlcm_s_affection = 0
 default dlcm_n_affection = 0
@@ -28,17 +22,17 @@ default dlcm_fragments = []
 default dlcm_seen_fragment = False
 default dlcm_secret = False
 
-def dlcm_pick_poem_word(word, style):
-    # The player's word choices determine who notices the poem most.
-    if style == "sayori":
-        dlcm_s_affection += 1
-    elif style == "natsuki":
-        dlcm_n_affection += 1
-    elif style == "yuri":
-        dlcm_y_affection += 1
-    elif style == "monika":
-        dlcm_m_affection += 1
-    return word
+init python:
+    def dlcm_pick_poem_word(word, style):
+        if style == "sayori":
+            store.dlcm_s_affection += 1
+        elif style == "natsuki":
+            store.dlcm_n_affection += 1
+        elif style == "yuri":
+            store.dlcm_y_affection += 1
+        elif style == "monika":
+            store.dlcm_m_affection += 1
+        return word
 
 label dlcm_start:
     $ config.label_overrides.pop("start", None)
@@ -62,10 +56,10 @@ label dlcm_day1:
     dlcm_mc "I was thinking about the Literature Club."
     dlcm_s "Oh! Then you're definitely coming today, right?"
     menu:
-        "Of course. I promised." :
+        "Of course. I promised.":
             $ dlcm_s_affection += 2
             dlcm_s "Yay! I knew you would!"
-        "I'll see how I feel." :
+        "I'll see how I feel.":
             $ dlcm_s_affection += 1
             dlcm_s "That's not a no! I'll take it!"
     scene bg school
