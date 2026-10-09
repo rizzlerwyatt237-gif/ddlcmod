@@ -2,6 +2,9 @@
 # Drop this file into a DDLC-compatible game's game/ folder.
 # It does not include or redistribute DDLC's original assets.
 
+# IMPORTANT: do not use the global name `theme` in init Python.
+# Ren'Py 6.99 uses `theme` for its Theme object.
+
 default dlcm_points = 0
 default dlcm_day = 1
 default dlcm_seen = 0
@@ -28,13 +31,13 @@ init python:
     ]
 
     dlcm_fragments_all = []
-    for theme in dlcm_themes:
-        for place in dlcm_places:
-            for motif in dlcm_motifs:
+    for dlcm_theme in dlcm_themes:
+        for dlcm_place in dlcm_places:
+            for dlcm_motif in dlcm_motifs:
                 dlcm_fragments_all.append(
                     "At %s, someone discovered %s and wrote one small sentence about %s. "
                     "The sentence was not perfect, but it carried %s forward." %
-                    (place, motif, theme, theme)
+                    (dlcm_place, dlcm_motif, dlcm_theme, dlcm_theme)
                 )
 
     def dlcm_get_fragment():
