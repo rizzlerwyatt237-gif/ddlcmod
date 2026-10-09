@@ -2,11 +2,13 @@
 # Drop this file into a DDLC-compatible game's game/ folder.
 # It does not include or redistribute DDLC's original assets.
 
-# IMPORTANT: do not use the global name `theme` in init Python.
-# Ren'Py 6.99 uses `theme` for its Theme object.
-
+# Ren'Py 6.99-compatible startup hook:
+# redirect DDLC's normal Start Game entry to our mod first.
+# We temporarily remove the override before continuing into DDLC's
+# original `start` label, so the original game remains intact.
 init python:
     import random
+    config.label_overrides["start"] = "dlcm_start"
 
     # 10 x 10 x 10 = 1000 original, runtime-generated literary fragments.
     dlcm_themes = [
@@ -48,8 +50,11 @@ default dlcm_seen = 0
 default dlcm_fragments = []
 default dlcm_route = "club"
 
-# This is intentionally not named `start`, so it does not replace DDLC's own start label.
 label dlcm_start:
+    # We are here because the normal DDLC `start` label was redirected.
+    # Remove the redirect before jumping to the original label, otherwise
+    # calling `start` would simply send us back here forever.
+    $ config.label_overrides.pop("start", None)
     scene black
     with fade
     "A new page waits behind the familiar classroom door."
