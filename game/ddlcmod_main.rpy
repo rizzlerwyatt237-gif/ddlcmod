@@ -2,15 +2,11 @@
 # Drop this file into a DDLC-compatible game's game/ folder.
 # It does not include or redistribute DDLC's original assets.
 
-# Ren'Py 6.99-compatible startup hook:
-# redirect DDLC's normal Start Game entry to our mod first.
-# We temporarily remove the override before continuing into DDLC's
-# original `start` label, so the original game remains intact.
+# Ren'Py 6.99-compatible startup hook.
 init python:
     import random
     config.label_overrides["start"] = "dlcm_start"
 
-    # 10 x 10 x 10 = 1000 original, runtime-generated literary fragments.
     dlcm_themes = [
         "hope", "memory", "friendship", "curiosity", "change",
         "courage", "loneliness", "dreams", "identity", "discovery"
@@ -51,9 +47,6 @@ default dlcm_fragments = []
 default dlcm_route = "club"
 
 label dlcm_start:
-    # We are here because the normal DDLC `start` label was redirected.
-    # Remove the redirect before jumping to the original label, otherwise
-    # calling `start` would simply send us back here forever.
     $ config.label_overrides.pop("start", None)
     scene black
     with fade
@@ -127,5 +120,6 @@ label dlcm_day_end:
         "The entire collection is complete."
         "The last page is blank. This time, you get to decide what goes there."
     else:
-        "The notebook remains open. There are still [1000 - len(dlcm_fragments)] fragments waiting."
+        $ dlcm_remaining = 1000 - len(dlcm_fragments)
+        "The notebook remains open. There are still [dlcm_remaining] fragments waiting."
     return
